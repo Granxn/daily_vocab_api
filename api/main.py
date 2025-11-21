@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from app.schemas import WordResponse
 from fastapi import HTTPException
-from app.routers import words, practice
+from app.routers import words, practice, stats
 from app.database import Base, engine
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -21,9 +21,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(words.router, prefix='/api' ,tags=["words"])
-app.include_router(practice.router,prefix='/api' , tags=["practice"])
+app.include_router(words.router,    prefix="/api", tags=["words"])
+app.include_router(practice.router, prefix="/api", tags=["practice"])
+app.include_router(stats.router,    prefix="/api", tags=["stats"])
 
+# Replace function get_random_word with route
+app.include_router(
+    words.router,
+    prefix = '/api',
+    tags = ["words"]
+)
 
 @app.get("/")
 def read_root():
